@@ -1,0 +1,1 @@
+gcc -g -o lc3decoder lc3_decoder.c lc3/src/*.c -Ilc3/include -Ilc3/src

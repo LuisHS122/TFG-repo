@@ -1,0 +1,1 @@
+gcc -o sbcenc sbc_enc.c sbc/src/*.c -Isbc/include -Isbc/src
