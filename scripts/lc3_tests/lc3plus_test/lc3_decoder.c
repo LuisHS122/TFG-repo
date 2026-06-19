@@ -53,8 +53,8 @@ int read_wav_header(FILE *file, WavHeader *header)
 
 int encode(LC3PLUS_Enc *enc){
     
-    FILE *fin = fopen("","rb");
-    FILE *fout = fopen("","wb");
+    FILE *fin = fopen("../../Opus_tests/wav inputs/balatro.wav","rb");
+    FILE *fout = fopen("output.lc3","wb");
     int error = 0;
 
     if (!fin || !fout)
@@ -90,22 +90,22 @@ int encode(LC3PLUS_Enc *enc){
     if(error != 0) printf("ERROR init %d",error);
     error = lc3plus_enc_set_frame_dms(enc,LC3PLUS_FRAME_DURATION_10MS);
     if(error != 0) printf("ERROR frame %d",error);
-    error = lc3plus_enc_set_bitrate(enc,BITRATE);
+    error = lc3plus_enc_set_bitrate(enc,31000);
     if(error != 0) printf("ERROR bitrate %d",error);
 
     printf("eee");
 
     int frames_encoded = 0;
-    
-    int16_t **PCM_DATAS; 
     int16_t PCM_DATA[160];
+    int16_t *PCM_DATAS[] = {PCM_DATA,NULL}; 
+    
 
-    PCM_DATAS[0] = PCM_DATA;
+    //PCM_DATAS[0] = PCM_DATA;
     int nbytes = lc3plus_enc_get_num_bytes(enc);
     int consumed = lc3plus_enc_get_input_samples(enc);
     int sratch_size = lc3plus_enc_get_scratch_size(enc);
     //int nbytes = lc3_frame_bytes(10000,BITRATE);
-    int scratch[400];
+    uint8_t scratch[5000];
     printf("nbytes= %d,consumed= %d, scrth size= %d \n",nbytes,consumed,sratch_size);
 
 
@@ -130,8 +130,8 @@ int encode(LC3PLUS_Enc *enc){
 }
 
 int decode(LC3PLUS_Dec *dec){
-    FILE *fin = fopen("","rb");
-    FILE *fout = fopen("","wb");
+    FILE *fin = fopen("output.lc3","rb");
+    FILE *fout = fopen("output_dec.raw","wb");
     if (!fin || !fout)
     {
         printf("Error opening files\n");
@@ -141,7 +141,7 @@ int decode(LC3PLUS_Dec *dec){
             fclose(fout);
         return -1;
     }
-    lc3plus_dec_init(dec,16000,1,LC3PLUS_PLC_ADVANCED);
+    lc3plus_dec_init(dec,16000,1,0);
 
     
     lc3plus_dec_set_frame_dms(dec,LC3PLUS_FRAME_DURATION_10MS);
@@ -150,15 +150,17 @@ int decode(LC3PLUS_Dec *dec){
 
     int frames_decoded = 0;
     int error = 0;
-    int16_t **PCM_DATAS;
     int16_t PCM_DATA[160];
+    int16_t *PCM_DATAS[] = {PCM_DATA,NULL};
+    
 
-    PCM_DATAS[0] = PCM_DATA;
-    int scratch[400];
+    //PCM_DATAS[0] = PCM_DATA;
+    uint8_t scratch[5000];
     //int nbytes = lc3_frame_bytes(10000,BITRATE);
     
-    int nbytes = 100;
+    int nbytes = 38;
     int sratch_size = lc3plus_dec_get_scratch_size(dec);
+    
     printf("scratch=  %d",sratch_size);
 
 
@@ -185,15 +187,17 @@ int decode(LC3PLUS_Dec *dec){
 int main(){
     
     
-LC3PLUS_Enc *enc = malloc(LC3PLUS_ENC_MAX_SIZE);    
-LC3PLUS_Dec *dec = malloc(lc3plus_dec_get_size(16000,1,LC3PLUS_PLC_ADVANCED));
+LC3PLUS_Enc *enc;    
+LC3PLUS_Dec *dec;
 
 
-printf("%d\n",lc3plus_enc_get_size(16000,1));
+
 enc = (LC3PLUS_Enc*)malloc(lc3plus_enc_get_size(16000,1));
+printf("enc size =  %d \n",lc3plus_enc_get_size(16000,1));
 if(enc == NULL) printf("aaaa");
-dec = malloc(lc3plus_dec_get_size(16000,1,LC3PLUS_PLC_ADVANCED));
+dec = malloc(lc3plus_dec_get_size(16000,1,0));
 encode(enc);
+printf("Decoding \n");
 decode(dec);
 
 
