@@ -63,11 +63,12 @@
 #include "typedefs.h"
 
 /* enable WMOPS profiling features by default, use WMOPS=0 to disable them */
+/*
 #ifndef WMOPS
 #define WMOPS 1
 #define EVS_WMOPS_COUNT
 #endif
-
+*/
 #define MAXCOUNTERS (15000)
 #define MAX_CALLERS_SAVED_FRAMES 5  /* # of Frame for which WMOPS Complexity Details will be saved, 0 = Disabled */
 

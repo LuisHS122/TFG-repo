@@ -1,1 +1,1 @@
-gcc -o lc3decoder lc3_decoder.c lc3plus/basic_op/*.c lc3plus/*.c  -Ilc3plus -Ilc3plus/basic_op -DDISABLE_HR_MODE -DDONT_COUNT_MEM -g
+gcc -o lc3decoder lc3_decoder.c lc3plus/basic_op/*.c lc3plus/*.c  -Ilc3plus -Ilc3plus/basic_op -DDISABLE_HR_MODE  -DDONT_COUNT_MEM -g

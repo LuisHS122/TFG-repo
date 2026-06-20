@@ -75,6 +75,7 @@
 
 /* OPTIONS */
 
+
 #define ENABLE_ADVANCED_PLC
 #define ENABLE_ADVANCED_PLC_DEFAULT
 #define ENABLE_BW_CONTROLLER
@@ -83,6 +84,7 @@
 #define ENABLE_PC
 #define ENABLE_PLC
 #define ENABLE_PADDING
+
 
 /* flags */
 #define ENABLE_BANDWIDTH_FLAG
@@ -259,8 +261,8 @@
 #endif
 
 
-#define DYNMEM_COUNT
-#define STAMEM_COUNT
+//#define DYNMEM_COUNT
+//#define STAMEM_COUNT
 
 
 /*
