@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<time.h>
+#include<windows.h>
 #include "lc3plus/lc3plus.h"
 //#include"functions.h"
 
@@ -97,9 +99,9 @@ int encode(LC3PLUS_Enc *enc){
 
     int frames_encoded = 0;
     int16_t PCM_DATA[160];
-    int16_t *PCM_DATAS[] = {PCM_DATA,NULL}; 
+    int16_t *PCM_DATAS[] = {NULL,NULL}; 
     
-
+    
     //PCM_DATAS[0] = PCM_DATA;
     int nbytes = lc3plus_enc_get_num_bytes(enc);
     int consumed = lc3plus_enc_get_input_samples(enc);
@@ -111,10 +113,28 @@ int encode(LC3PLUS_Enc *enc){
 
     int8_t enc_buffer[400];
 
+    LARGE_INTEGER inicio, finn, frecuencia;
+    double tiempo_usegundos;
+
+    // Obtener la frecuencia del contador (tics por segundo)
+    QueryPerformanceFrequency(&frecuencia);
+
+    printf("Frecuencia: %ld",frecuencia);
+
+    // Guardar el tic de inicio
+    
+    
+
     while(!feof(fin)){
-        fread(PCM_DATAS[0],sizeof(int16_t),160,fin);
+        fread(PCM_DATA,sizeof(int16_t),160,fin);
+        PCM_DATAS[0] = PCM_DATA;
         //error = lc3_encode(enc,LC3_PCM_FORMAT_S16,PCM_DATA,1,nbytes,enc_buffer);
+        QueryPerformanceCounter(&inicio);
         error = lc3plus_enc16(enc,PCM_DATAS,enc_buffer,&nbytes,scratch);
+        QueryPerformanceCounter(&finn);
+        tiempo_usegundos = (double)(finn.QuadPart - inicio.QuadPart) * 1000000.0 / frecuencia.QuadPart;
+        printf("Encode time: %f \n",tiempo_usegundos);
+        
         if(error != 0){
             printf("ENCODER ERROR");
         }

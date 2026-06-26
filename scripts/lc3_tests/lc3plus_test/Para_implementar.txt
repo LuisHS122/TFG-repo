@@ -1,0 +1,10 @@
+--El trabajo con esta librería requiere de ciertas modificaciones no triviales de encontrar para su correcto funcionamiento en sistemas de recursos limitados. 
+
+Por defecto esta librería trae activada una serie de funciones de debug que consumen 470 MB de RAM, supuestamente su desactivación se puede hacer definiendo -WMOPS=0. Esto 
+no tiene resultado alguno. Se deben hallar la definición de WMOPS en count.h y desactivarla allí, pasando de 470MB de RAM a tan solo 144 bytes.
+
+
+Es necesario cuando se trabaja en un procesador arm ir a basop_mpy.c, y en la línea donde se encuentran las líneas #ifdef CR9_C_ADD_1p25MS_LRSNS 
+//#  if !defined(__arm__) && !defined(__hexagon__) cambiar #  if !defined(__arm__) && !defined(__hexagon__) por #if 1
+
+TODO: definir funciones arm con arm math
